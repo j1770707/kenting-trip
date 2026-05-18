@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>恆春.墾丁 ── 兩天一夜緩慢南漂</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Archivo:wght@400;500;700;900&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: light only;
+    --sand:#f1e7d4;
+    --paper:#f6efe0;
+    --ink:#5a534b;          /* 主文字：柔灰咖啡，取代純黑 */
+    --ink-soft:#8a8278;     /* 次要文字：更淺的灰 */
+    --ink-faint:#b8b0a4;    /* 線條、輔助：淺灰 */
+    --ink-strong:#3d3832;   /* 大標題用，比正文略深但仍非黑 */
+    --sun:#d6622b;
+    --sun-deep:#a83f17;
+    --ocean:#3d5a6c;        /* 海洋藍提亮一點 */
+    --ocean-deep:#1f3340;
+    --grass:#5d6a3e;
+    --rule:#b8b0a4;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:var(--paper);color:var(--ink);font-family:"Noto Serif TC",serif;-webkit-font-smoothing:antialiased;}
+  body{
+    background-image:
+      radial-gradient(circle at 18% 12%, rgba(214,98,43,.08), transparent 40%),
+      radial-gradient(circle at 82% 88%, rgba(29,58,74,.10), transparent 45%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1, 0 0 0 0 0.08, 0 0 0 0 0.06, 0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    background-attachment: fixed;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none;}
+
+  /* ============ 頁眉 ============ */
+  .masthead{
+    border-bottom:1px solid var(--ink-faint);
+    padding:18px 36px 14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    font-family:"DM Mono",monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    background:var(--paper);
+    position:relative;
+    z-index:3;
+  }
+  .masthead .vol{font-weight:500;}
+  .masthead .issue{display:flex;gap:24px;}
+  .masthead .issue span:nth-child(2){opacity:.55;}
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;
+    padding:60px 36px 80px;
+    border-bottom:1px solid var(--ink-faint);
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;inset:0;
+    background:
+      linear-gradient(180deg, transparent 0%, transparent 55%, rgba(214,98,43,.06) 100%);
+    pointer-events:none;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    align-items:end;
+    position:relative;
+    z-index:2;
+  }
+  .kicker{
+    font-family:"Cormorant Garamond",serif;
+    font-style:italic;
+    font-size:22px;
+    color:var(--sun-deep);
+    margin-bottom:18px;
+    display:flex;align-items:center;gap:16px;
+  }
+  .kicker::before{
+    content:"";
+    width:48px;height:1px;background:var(--sun-deep);
+  }
+  h1.hero-title{
+    font-family:"Noto Serif TC",serif;
+    font-weight:900;
+    font-size:clamp(56px,8vw,128px);
+    line-height:.88;
+    letter-spacing:-.02em;
+    color:var(--ink-strong);
+    margin-bottom:28px;
+  }
+  h1.hero-title .accent{
+    color:var(--sun);
+    font-style:italic;
+    font-family:"Cormorant Garamond",serif;
+    font-weight:500;
+    display:inline-block;
+    transform:translateY(-6px);
+  }
+  .hero-meta{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+    padding:24px 0;
+    border-top:1px solid var(--ink-faint);
+    border-bottom:1px solid var(--ink-faint);
+    font-family:"DM Mono",monospace;
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+  .hero-meta dt{opacity:.55;margin-bottom:6px;font-size:9px;}
+  .hero-meta dd{font-weight:500;font-size:13px;letter-spacing:.06em;}
+  .lede{
+    font-family:"Cormorant Garamond",serif;
+    font-size:22px;
+    line-height:1.55;
+    font-style:italic;
+    color:var(--ink-soft);
+    margin-top:28px;
+    border-left:2px solid var(--sun);
+    padding-left:20px;
+  }
+  .lede em{font-family:"Noto Serif TC";font-style:normal;color:var(--sun-deep);font-weight:500;}
+
+  /* 太陽圖示 */
+  .sun-emblem{
+    position:absolute;
+    top:50px;right:36px;
+    width:140px;height:140px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #f9b25b 0%, var(--sun) 45%, var(--sun-deep) 100%);
+    box-shadow:0 0 0 1px var(--ink), 0 30px 60px -20px rgba(168,63,23,.5);
+    z-index:1;
+  }
+  .sun-emblem::after{
+    content:"SOUTH BOUND";
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    font-family:"DM Mono",monospace;
+    font-size:10px;
+    color:var(--paper);
+    letter-spacing:.3em;
+    transform:rotate(-12deg);
+  }
+
+  /* ============ 章節分隔 ============ */
+  .day-divider{
+    background:var(--ink-strong);
+    color:var(--paper);
+    padding:80px 36px;
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    gap:60px;
+    align-items:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .day-divider::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at 80% 50%, rgba(214,98,43,.25), transparent 50%);
+    pointer-events:none;
+  }
+  .day-number{
+    font-family:"Cormorant Garamond",serif;
+    font-size:220px;
+    font-weight:300;
+    line-height:.85;
+    font-style:italic;
+    color:var(--sun);
+    position:relative;
+    z-index:1;
+  }
+  .day-title{
+    position:relative;z-index:1;
+  }
+  .day-label{
+    font-family:"DM Mono",monospace;
+    font-size:11px;
+    letter-spacing:.3em;
+    opacity:.6;
+    margin-bottom:14px;
+  }
+  .day-title h2{
+    font-size:64px;
+    font-weight:700;
+    line-height:1;
+    margin-bottom:18px;
+  }
+  .day-title p{
+    font-family:"Cormorant Garamond",serif;
+    font-style:italic;
+    font-size:22px;
+    opacity:.78;
+    max-width:520px;
+  }
+  .day-date{
+    position:relative;z-index:1;
+    font-family:"DM Mono",monospace;
+    font-size:11px;
+    letter-spacing:.2em;
+    writing-mode:vertical-rl;
+    text-orientation:mixed;
+    opacity:.55;
+  }
+
+  /* ============ 行程卡片 ============ */
+  .schedule{
+    padding:60px 36px 100px;
+    max-width:1280px;
+    margin:0 auto;
+  }
+  .stop{
+    display:grid;
+    grid-template-columns:90px 1fr 1fr;
+    gap:40px;
+    padding:48px 0;
+    border-bottom:1px solid rgba(184,176,164,.4);
+    position:relative;
+  }
+  .stop:last-child{border-bottom:none;}
+  .stop:hover .stop-num{color:var(--sun);transform:translateX(-4px);}
+  .stop:hover .map-link{background:var(--ink-strong);color:var(--paper);border-color:var(--ink-strong);}
+
+  .stop-num{
+    font-family:"Cormorant Garamond",serif;
+    font-size:74px;
+    font-weight:400;
+    line-height:1;
+    color:var(--ink-soft);
+    transition:all .4s ease;
+  }
+  .stop-num small{
+    display:block;
+    font-family:"DM Mono",monospace;
+    font-size:11px;
+    letter-spacing:.15em;
+    color:var(--sun-deep);
+    margin-top:6px;
+    font-weight:500;
+  }
+  .stop-body h3{
+    font-size:32px;
+    font-weight:700;
+    letter-spacing:-.01em;
+    margin-bottom:6px;
+    line-height:1.15;
+    color:var(--ink-strong);
+  }
+  .stop-body .en{
+    font-family:"Cormorant Garamond",serif;
+    font-style:italic;
+    font-size:18px;
+    color:var(--sun-deep);
+    margin-bottom:18px;
+    letter-spacing:.02em;
+  }
+  .stop-body p{
+    font-size:15px;
+    line-height:1.75;
+    color:var(--ink-soft);
+    max-width:480px;
+  }
+  .stop-meta{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:18px;
+    justify-content:space-between;
+  }
+  .tag-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:flex-end;
+  }
+  .tag{
+    font-family:"DM Mono",monospace;
+    font-size:10px;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    padding:6px 12px;
+    border:1px solid var(--ink-faint);
+    border-radius:30px;
+    color:var(--ink-soft);
+  }
+  .tag.hot{background:var(--sun);color:var(--paper);border-color:var(--sun);}
+  .tag.night{background:var(--ocean);color:var(--paper);border-color:var(--ocean);}
+  .tag.food{background:var(--paper);}
+  .map-link{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:14px 22px;
+    border:1px solid var(--ink-faint);
+    border-radius:40px;
+    font-family:"DM Mono",monospace;
+    font-size:11px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    font-weight:500;
+    color:var(--ink-soft);
+    transition:all .3s ease;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .map-link::after{
+    content:"→";
+    font-size:14px;
+    transition:transform .3s ease;
+  }
+  .map-link:hover::after{transform:translateX(4px);}
+
+  /* ============ 二選一卡片 ============ */
+  .stop-choice .stop-body{grid-column:span 1;}
+  .choice-label{
+    font-family:"DM Mono",monospace;
+    font-size:10px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--sun-deep);
+    margin-bottom:6px;
+  }
+  .stop-choice h3 .or{
+    font-family:"Cormorant Garamond",serif;
+    font-style:italic;
+    font-weight:400;
+    color:var(--sun);
+    font-size:22px;
+    margin:0 8px;
+    vertical-align:2px;
+  }
+  .choice-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin-top:22px;
+  }
+  .choice-card{
+    background:rgba(255,255,255,.35);
+    border:1px solid var(--ink-faint);
+    border-radius:14px;
+    padding:20px 18px;
+    position:relative;
+    transition:all .3s ease;
+  }
+  .choice-card:hover{
+    background:rgba(255,255,255,.55);
+    border-color:var(--sun);
+    transform:translateY(-2px);
+  }
+  .choice-tag{
+    font-family:"DM Mono",monospace;
+    font-size:9px;
+    letter-spacing:.2em;
+    color:var(--paper);
+    background:var(--sun);
+    display:inline-block;
+    padding:3px 8px;
+    border-radius:20px;
+    margin-bottom:10px;
+  }
+  .choice-card h4{
+    font-size:20px;
+    font-weight:700;
+    color:var(--ink-strong);
+    margin-bottom:8px;
+    line-height:1.2;
+  }
+  .choice-card p{
+    font-size:13px;
+    line-height:1.7;
+    color:var(--ink-soft);
+    margin-bottom:14px;
+  }
+  .map-link.mini{
+    padding:8px 14px;
+    font-size:10px;
+    letter-spacing:.15em;
+  }
+
+  /* 第二天主題色變化 */
+  .day-2 .stop-num small{color:var(--ocean);}
+  .day-2 .stop-body .en{color:var(--ocean);}
+  .day-2 .lede{border-color:var(--ocean);}
+
+  /* ============ 路線小標 ============ */
+  .route-note{
+    text-align:center;
+    padding:40px 0 0;
+    font-family:"Cormorant Garamond",serif;
+    font-style:italic;
+    font-size:20px;
+    color:#7a6552;
+  }
+  .route-note::before,.route-note::after{
+    content:"✦";
+    margin:0 14px;
+    color:var(--sun);
+    font-style:normal;
+  }
+
+  /* ============ 結尾 ============ */
+  .colophon{
+    background:var(--ocean-deep);
+    color:var(--paper);
+    padding:80px 36px 50px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    align-items:end;
+    position:relative;
+    overflow:hidden;
+  }
+  .colophon::before{
+    content:"";
+    position:absolute;inset:0;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(214,98,43,.15), transparent 50%);
+  }
+  .colophon-title{
+    font-family:"Cormorant Garamond",serif;
+    font-style:italic;
+    font-size:72px;
+    font-weight:300;
+    line-height:1;
+    color:var(--sand);
+    position:relative;
+  }
+  .colophon-title .star{color:var(--sun);}
+  .colophon-text{
+    position:relative;
+    font-family:"DM Mono",monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    line-height:2;
+    opacity:.7;
+  }
+  .colophon-text strong{color:var(--sun);font-weight:500;}
+
+  /* 星空 */
+  .stars{
+    position:absolute;inset:0;
+    pointer-events:none;
+    opacity:.6;
+  }
+  .stars span{
+    position:absolute;
+    width:2px;height:2px;
+    background:var(--paper);
+    border-radius:50%;
+    animation:twinkle 3s infinite ease-in-out;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:.2;transform:scale(.8);}
+    50%{opacity:1;transform:scale(1.3);}
+  }
+
+  /* 進場動畫 */
+  .stop{opacity:0;transform:translateY(20px);animation:rise .8s ease forwards;}
+  .stop:nth-child(1){animation-delay:.05s;}
+  .stop:nth-child(2){animation-delay:.15s;}
+  .stop:nth-child(3){animation-delay:.25s;}
+  .stop:nth-child(4){animation-delay:.35s;}
+  .stop:nth-child(5){animation-delay:.45s;}
+  .stop:nth-child(6){animation-delay:.55s;}
+  .stop:nth-child(7){animation-delay:.65s;}
+  @keyframes rise{
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  /* 響應式 */
+  @media (max-width:780px){
+    .masthead{flex-direction:column;align-items:flex-start;gap:8px;padding:16px 22px;}
+    .hero{padding:40px 22px 50px;}
+    .hero-grid{grid-template-columns:1fr;gap:30px;}
+    h1.hero-title{font-size:18vw;}
+    .sun-emblem{width:90px;height:90px;top:30px;right:22px;}
+    .hero-meta{grid-template-columns:1fr 1fr;gap:14px;padding:18px 0;}
+    .day-divider{grid-template-columns:1fr;gap:24px;padding:50px 22px;}
+    .day-number{font-size:120px;}
+    .day-title h2{font-size:40px;}
+    .day-date{writing-mode:horizontal-tb;}
+    .schedule{padding:30px 22px 60px;}
+    .stop{grid-template-columns:1fr;gap:18px;padding:32px 0;}
+    .stop-num{font-size:52px;}
+    .stop-num small{display:inline-block;margin-left:14px;margin-top:0;}
+    .stop-meta{align-items:flex-start;}
+    .tag-row{justify-content:flex-start;}
+    .stop-body h3{font-size:24px;}
+    .choice-grid{grid-template-columns:1fr;gap:12px;}
+    .stop-choice h3 .or{display:block;margin:4px 0;}
+    .colophon{grid-template-columns:1fr;padding:60px 22px 40px;gap:30px;}
+    .colophon-title{font-size:48px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- 頁眉 -->
+<header class="masthead">
+  <div class="vol">PLUS ONE INFINITY · TRAVEL JOURNAL</div>
+  <div class="issue">
+    <span>Vol. 01 · 南島緩漂</span>
+    <span>Hengchun × Kenting</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="sun-emblem"></div>
+  <div class="hero-grid">
+    <div>
+      <div class="kicker">Two Days · One Night · One Long Breath</div>
+      <h1 class="hero-title">恆春<br>慢漂<span class="accent">Kenting.</span></h1>
+      <dl class="hero-meta">
+        <div>
+          <dt>Duration</dt>
+          <dd>2 Days 1 Night</dd>
+        </div>
+        <div>
+          <dt>Base Camp</dt>
+          <dd>南灣．厝 True Hub</dd>
+        </div>
+        <div>
+          <dt>Mood</dt>
+          <dd>Slow · Salty · Lit</dd>
+        </div>
+      </dl>
+    </div>
+    <div>
+      <p class="lede">
+        從<em>滿州的山間咖啡</em>啟程，穿過恆春古城的茶屋與烘焙坊，
+        把行李丟在南灣海邊，回頭去吃一份咖哩、走一條夜市、躺一片星空。
+        這一趟，不趕路，<em>只趕日落與晚風。</em>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DAY 1 ============ -->
+<section class="day-divider">
+  <div class="day-number">Ⅰ</div>
+  <div class="day-title">
+    <div class="day-label">DAY ONE · 山風到海風</div>
+    <h2>從滿州山邊<br>一路漂到墾丁海邊</h2>
+    <p>下午從滿州出發，傍晚在古城裡吃喝晃蕩，夜裡轉場到貓鼻頭看星星。</p>
+  </div>
+  <div class="day-date">DAY · 01 · AFTERNOON → MIDNIGHT</div>
+</section>
+
+<div class="schedule">
+
+  <!-- Stop 1 -->
+  <article class="stop">
+    <div class="stop-num">01<small>13:00</small></div>
+    <div class="stop-body">
+      <h3>偷聽咖啡</h3>
+      <div class="en">thauthiann · Manzhou</div>
+      <p>
+        滿州山裡藏著的一間咖啡館，深焙咖啡、咖哩飯、起士肉桂卷，配上選物與電影海報。
+        從這裡開始一整天，胃和耳朵都會被打開。
+      </p>
+    </div>
+    <div class="stop-meta">
+      <div class="tag-row">
+        <span class="tag food">午餐</span>
+        <span class="tag">滿州鄉</span>
+        <span class="tag hot">深焙咖啡</span>
+      </div>
+      <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=thauthiann&query_place_id=ChIJEWvGwXC1cTQRxU-VKHtino4" target="_blank" rel="noopener">Google Maps 導航</a>
+    </div>
+  </article>
+
+  <!-- Stop 2 -->
+  <article class="stop">
+    <div class="stop-num">02<small>15:00</small></div>
+    <div class="stop-body">
+      <h3>敍々</h3>
+      <div class="en">Joshu Tea House · Hengchun</div>
+      <p>
+        恆春古城南門邊的石頭茶屋，焙茶巴斯克、烏龍冰磚、手刷抹茶拿鐵。
+        下午茶時段最舒服，是一個會讓人忘記在墾丁的安靜小宇宙。
+      </p>
+    </div>
+    <div class="stop-meta">
+      <div class="tag-row">
+        <span class="tag food">茶點</span>
+        <span class="tag">恆春古城</span>
+      </div>
+      <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=%E6%95%8D%E3%80%85+%E6%81%92%E6%98%A5&query_place_id=ChIJnWV6y5GxcTQRFJb3CU1K8Lk" target="_blank" rel="noopener">Google Maps 導航</a>
+    </div>
+  </article>
+
+  <!-- Stop 3 -->
+  <article class="stop">
+    <div class="stop-num">03<small>16:30</small></div>
+    <div class="stop-body">
+      <h3>覓 manmade</h3>
+      <div class="en">&amp; Bageri by Manmade</div>
+      <p>
+        在地人首推的麵包甜點店，可頌據說是全台灣最酥的等級，
+        蛋塔、肉桂卷、芋頭包都是亮點。買一袋當宵夜或明天早餐都剛剛好。
+      </p>
+    </div>
+    <div class="stop-meta">
+      <div class="tag-row">
+        <span class="tag food">烘焙</span>
+        <span class="tag hot">必買可頌</span>
+      </div>
+      <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=%26+Bageri+By+%E8%A6%93man&query_place_id=ChIJ0QG_F9uwcTQRIVfnghCxXFY" target="_blank" rel="noopener">Google Maps 導航</a>
+    </div>
+  </article>
+
+  <!-- Stop 4 -->
+  <article class="stop">
+    <div class="stop-num">04<small>17:00</small></div>
+    <div class="stop-body">
+      <h3>厝 True Hub 旅店</h3>
+      <div class="en">Cuo True Hub · Nanwan</div>
+      <p>
+        南灣路上的設計型旅店，房間乾淨、海景開闊，馬路對面就是海灘、隔壁是 7-Eleven。
+        在這裡放下行李、沖個澡，把夕陽留給陽台。
+      </p>
+    </div>
+    <div class="stop-meta">
+      <div class="tag-row">
+        <span class="tag">南灣</span>
+        <span class="tag">CHECK-IN</span>
+      </div>
+      <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=%E5%8E%9DTrue+Hub%E6%97%85%E5%BA%97&query_place_id=ChIJb_0we7CxcTQRliWAMywYJrE" target="_blank" rel="noopener">Google Maps 導航</a>
+    </div>
+  </article>
+
+  <!-- Stop 5 -->
+  <article class="stop">
+    <div class="stop-num">05<small>18:30</small></div>
+    <div class="stop-body">
+      <h3>找食小賣所</h3>
+      <div class="en">Zhaoshi Snack Bar</div>
+      <p>
+        恆春最強日式咖哩沒有之一，炸豬排酥脆、咖哩烏龍很有靈魂，
+        必點起司薯餅。從旅店過去開車約 15 分鐘，剛好把肚子騰空再來戰一回合。
+      </p>
+    </div>
+    <div class="stop-meta">
+      <div class="tag-row">
+        <span class="tag food">晚餐</span>
+        <span class="tag hot">日式咖哩</span>
+      </div>
+      <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Zhaoshi+Snack+Bar&query_place_id=ChIJfzr6F9uwcTQRUJGmx8AUKqs" target="_blank" rel="noopener">Google Maps 導航</a>
+    </div>
+  </article>
+
+  <!-- Stop 6 -->
+  <article class="stop">
+    <div class="stop-num">06<small>21:00</small></div>
+    <div class="stop-body">
+      <h3>墾丁大街</h3>
+      <div class="en">Kenting Main Street</div>
+      <p>
+        夜市感、海風感、調酒感全部都有。沒有一定要吃什麼，
+        就是邊走邊喝邊看人，順便買兩杯啤酒打包帶去貓鼻頭。
+      </p>
+    </div>
+    <div class="stop-meta">
+      <div class="tag-row">
+        <span class="tag night">夜市</span>
+        <span class="tag">人潮聚集</span>
+      </div>
+      <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=%E5%A2%BE%E4%B8%81%E5%A4%A7%E8%A1%97&query_place_id=ChIJG7fKhoWxcTQR6CrWL3xdESQ" target="_blank" rel="noopener">Google Maps 導航</a>
+    </div>
+  </article>
+
+  <!-- Stop 7 -->
+  <article class="stop">
+    <div class="stop-num">07<small>22:30</small></div>
+    <div class="stop-body">
+      <h3>貓鼻頭看星星</h3>
+      <div class="en">Maobitou · Stargazing</div>
+      <p>
+        恆春半島最西南端，光害低、視野遼闊，海浪聲就是背景音樂。
+        把車停穩、躺在引擎蓋上、抬頭，這就是今天最後一個畫面。
+      </p>
+    </div>
+    <div class="stop-meta">
+      <div class="tag-row">
+        <span class="tag night">夜景</span>
+        <span class="tag night">觀星</span>
+      </div>
+      <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Maobitou+Park&query_place_id=ChIJJVE29t6vcTQRC_jrh2AFxCI" target="_blank" rel="noopener">Google Maps 導航</a>
+    </div>
+  </article>
+
+  <div class="route-note">回旅店，洗去一身海風與沙粒，睡個好覺</div>
+
+</div>
+
+<!-- ============ DAY 2 ============ -->
+<section class="day-divider">
+  <div class="day-number">Ⅱ</div>
+  <div class="day-title">
+    <div class="day-label">DAY TWO · 海岸線到老城</div>
+    <h2>睡到自然醒<br>沿著海岸線慢慢逛</h2>
+    <p>早晨慢慢起床吃早餐，中午去最南端的 LUMI 吃荷蘭鬆餅，下午躺在白沙灣，傍晚進城吃台菜。</p>
+  </div>
+  <div class="day-date">DAY · 02 · LATE MORNING → EVENING</div>
+</section>
+
+<div class="schedule day-2">
+
+  <!-- D2 Stop 1 -->
+  <article class="stop">
+    <div class="stop-num">01<small>10:00</small></div>
+    <div class="stop-body">
+      <h3>睡到自然醒 ‧ 旅店早餐</h3>
+      <div class="en">Slow Morning · True Hub</div>
+      <p>
+        放假不就是要睡飽。海風從陽台吹進來才願意起床，
+        配上昨天買的覓 manmade 可頌和一杯熱拿鐵，這是只有住南灣才有的福利。
+      </p>
+    </div>
+    <div class="stop-meta">
+      <div class="tag-row">
+        <span class="tag">放空</span>
+        <span class="tag">補眠</span>
+      </div>
+      <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=%E5%8E%9DTrue+Hub%E6%97%85%E5%BA%97&query_place_id=ChIJb_0we7CxcTQRliWAMywYJrE" target="_blank" rel="noopener">Google Maps 導航</a>
+    </div>
+  </article>
+
+  <!-- D2 Stop 2 -->
+  <article class="stop">
+    <div class="stop-num">02<small>12:00</small></div>
+    <div class="stop-body">
+      <h3>LUMI</h3>
+      <div class="en">LUMI Café · Eluan</div>
+      <p>
+        鵝鑾鼻附近的一間小café，主打正統荷蘭小鬆餅 poffertjes，
+        外酥內軟、有焦糖跟起司鹹甜兩種。座位不多，到了沒位老闆會幫你排時間，
+        從南灣開過去剛好沿著海。
+      </p>
+    </div>
+    <div class="stop-meta">
+      <div class="tag-row">
+        <span class="tag food">午餐</span>
+        <span class="tag hot">荷蘭鬆餅</span>
+      </div>
+      <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=LUMI+%E6%81%92%E6%98%A5&query_place_id=ChIJaZGhaImycTQR5YTZUZ38hic" target="_blank" rel="noopener">Google Maps 導航</a>
+    </div>
+  </article>
+
+  <!-- D2 Stop 3 -->
+  <article class="stop">
+    <div class="stop-num">03<small>13:30</small></div>
+    <div class="stop-body">
+      <h3>墾點心 ‧ 戚風蛋糕</h3>
+      <div class="en">Kenting Dessert · Chiffon Cake</div>
+      <p>
+        Google 滿分的下午茶蛋糕店，巧克力戚風、新鮮草莓蛋糕都很厲害。
+        有片漂亮草坪可以在外面坐著吃，老闆親切到會自己過來聊兩句。
+      </p>
+    </div>
+    <div class="stop-meta">
+      <div class="tag-row">
+        <span class="tag food">甜點</span>
+        <span class="tag hot">5★</span>
+      </div>
+      <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=%E5%A2%BE%E9%BB%9E%E5%BF%83+%E6%88%9A%E9%A2%A8%E8%9B%8B%E7%B3%95&query_place_id=ChIJiR2K5-ezcTQRvjpnjg4BsPE" target="_blank" rel="noopener">Google Maps 導航</a>
+    </div>
+  </article>
+
+  <!-- D2 Stop 4 -->
+  <article class="stop stop-choice">
+    <div class="stop-num">04<small>15:00</small></div>
+    <div class="stop-body">
+      <div class="choice-label">A / B 二選一 ‧ 看當天心情</div>
+      <h3>貓鼻頭 <span class="or">或</span> 龍磐公園</h3>
+      <div class="en">Maobitou · OR · Longpan Park</div>
+      <div class="choice-grid">
+        <div class="choice-card">
+          <div class="choice-tag">選項 A</div>
+          <h4>貓鼻頭公園</h4>
+          <p>
+            昨晚是夜景，今天看白天版。礁岩海岸線一路鋪展開，太平洋和巴士海峽就在腳下會合。
+            適合想完整收集「同地點日夜對照」的人。
+          </p>
+          <a class="map-link mini" href="https://www.google.com/maps/search/?api=1&query=Maobitou+Park&query_place_id=ChIJJVE29t6vcTQRC_jrh2AFxCI" target="_blank" rel="noopener">Maps</a>
+        </div>
+        <div class="choice-card">
+          <div class="choice-tag">選項 B</div>
+          <h4>龍磐公園</h4>
+          <p>
+            最像紐西蘭的台灣海岸線，草原一路延伸到懸崖，懸崖下就是太平洋。
+            風大、景遼闊，適合想把腦袋徹底吹空的人。
+          </p>
+          <a class="map-link mini" href="https://www.google.com/maps/search/?api=1&query=Longpan+Park&query_place_id=ChIJoRA-sl6ycTQR3kXYA9igkhw" target="_blank" rel="noopener">Maps</a>
+        </div>
+      </div>
+    </div>
+    <div class="stop-meta">
+      <div class="tag-row">
+        <span class="tag">海景</span>
+        <span class="tag hot">二選一</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- D2 Stop 5 -->
+  <article class="stop">
+    <div class="stop-num">05<small>16:30</small></div>
+    <div class="stop-body">
+      <h3>墾丁白沙灣</h3>
+      <div class="en">Kenting Baishawan · The Beach</div>
+      <p>
+        《少年Pi》拍攝地，細白沙加碧綠海水，比墾丁大灣安靜很多。
+        傍晚的光線最舒服，可以租個小椅子坐著看海，把今天的行程在這裡按下暫停鍵。
+      </p>
+    </div>
+    <div class="stop-meta">
+      <div class="tag-row">
+        <span class="tag hot">必看夕陽</span>
+        <span class="tag">沙灘</span>
+      </div>
+      <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Kenting+Baishawan&query_place_id=ChIJd-8J4gOwcTQR2qCIy4_WHSk" target="_blank" rel="noopener">Google Maps 導航</a>
+    </div>
+  </article>
+
+  <!-- D2 Stop 6 -->
+  <article class="stop">
+    <div class="stop-num">06<small>18:00</small></div>
+    <div class="stop-body">
+      <h3>虎炊稻 Höo Triptown</h3>
+      <div class="en">Höo Triptown · Taiwanese Salon</div>
+      <p>
+        恆春古城裡的台菜沙龍，巷弄裡的低調名店。鹹蛋黃豆腐是招牌、桑葚煙燻鴨捲也是亮點，
+        裝潢復古到每個角落都能拍照。建議先訂位，吃完再北返。
+      </p>
+    </div>
+    <div class="stop-meta">
+      <div class="tag-row">
+        <span class="tag food">晚餐</span>
+        <span class="tag hot">台菜創意</span>
+        <span class="tag">建議訂位</span>
+      </div>
+      <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=%E8%99%8E%E7%82%8A%E7%A8%BB+H%C3%B6o+Triptown&query_place_id=ChIJzR0mimCxcTQRv4QPJ3nnPYM" target="_blank" rel="noopener">Google Maps 導航</a>
+    </div>
+  </article>
+
+  <!-- D2 Stop 7 -->
+  <article class="stop">
+    <div class="stop-num">07<small>19:30</small></div>
+    <div class="stop-body">
+      <h3>啟程返家</h3>
+      <div class="en">The Long Road Home</div>
+      <p>
+        把這兩天裝進車後座一起帶回去。頭頂的天空、皮膚上的鹽味、車裡還沒散的咖哩香——
+        這就是恆春送你的紀念品。下次再來。
+      </p>
+    </div>
+    <div class="stop-meta">
+      <div class="tag-row">
+        <span class="tag">回家</span>
+      </div>
+      <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=%E6%81%92%E6%98%A5%E9%8E%AE&destination=%E9%AB%98%E9%9B%84&travelmode=driving" target="_blank" rel="noopener">回程路線</a>
+    </div>
+  </article>
+
+</div>
+
+<!-- 結語 -->
+<footer class="colophon">
+  <div class="stars" id="stars"></div>
+  <div class="colophon-title">
+    Two days,<br>one ocean,<br><span class="star">∞</span> memories.
+  </div>
+  <div class="colophon-text">
+    <strong>編輯／路線設計</strong><br>
+    Plus One Infinity × Claude<br><br>
+    <strong>主軸</strong><br>
+    山風 → 古城 → 海風 → 星空<br><br>
+    <strong>溫馨小提醒</strong><br>
+    · 偷聽咖啡 週二公休<br>
+    · 敍々 週四、週五公休<br>
+    · 覓 manmade 週四、週五公休<br>
+    · 墾點心 15:00 後建議先電話確認<br>
+    · 虎炊稻 建議先訂位<br>
+    · 出發前打個電話最安心
+  </div>
+</footer>
+
+<script>
+  // 隨機產生星星
+  const starsBox = document.getElementById('stars');
+  for(let i=0;i<60;i++){
+    const s = document.createElement('span');
+    s.style.top = Math.random()*100 + '%';
+    s.style.left = Math.random()*100 + '%';
+    s.style.animationDelay = (Math.random()*3) + 's';
+    s.style.opacity = 0.3 + Math.random()*0.7;
+    starsBox.appendChild(s);
+  }
+</script>
+
+</body>
+</html>
